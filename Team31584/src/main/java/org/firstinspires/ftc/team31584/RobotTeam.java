@@ -60,9 +60,12 @@ public class RobotTeam extends LinearOpMode {
 
                 for (AprilTagDetection tag : detections1) {
                     telemetry.addData("[Cam1] Tag ID", tag.id);
-                    telemetry.addData("[Cam1] Pos X", tag.ftcPose.x);
-                    telemetry.addData("[Cam1] Pos Y", tag.ftcPose.y);
-                    telemetry.addData("[Cam1] Pos Z", tag.ftcPose.z);
+                    telemetry.addData("[Cam1] TAGPos X", tag.ftcPose.x);
+                    telemetry.addData("[Cam1] TAGPos Y", tag.ftcPose.y);
+                    telemetry.addData("[Cam1] TAGPos Z", tag.ftcPose.z);
+                    telemetry.addData("[Cam1] ROBOTPos X", tag.robotPose.getPosition().x);
+                    telemetry.addData("[Cam1] ROBOTPos Y", tag.robotPose.getPosition().y);
+                    telemetry.addData("[Cam1] ROBOTPos Z", tag.robotPose.getPosition().z);
                 }
             } else {
                 relativeX = 0;
