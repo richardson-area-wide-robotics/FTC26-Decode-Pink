@@ -5,6 +5,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -29,6 +31,7 @@ public class RobotTeam extends LinearOpMode {
                 hardwareMap.get(DcMotor.class, "motor 3"),
                 imu
         );
+        Intake.init(hardwareMap.get(Servo.class, "Servo0"), hardwareMap.get(Servo.class, "Servo1"));
 
         // --- Setup Vision ---
         visionManager = new VisionManager(hardwareMap);
@@ -50,6 +53,9 @@ public class RobotTeam extends LinearOpMode {
                 if(relativeX<0){
                     Drivetrain.drive(0.0f,-1.0f,0.0f);
                 }
+            }
+            if(gamepad1.y){
+                Intake.servo();
             }
 
 

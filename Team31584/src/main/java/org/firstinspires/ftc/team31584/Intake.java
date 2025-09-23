@@ -29,4 +29,24 @@ public class Intake {
         uphex3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         coreHex.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    public static void init(Servo s1, Servo s2){
+        servo1 = s1;
+        servo2 = s2;
+    }
+
+    private static boolean isOpen = false;
+
+    public static void servo() {
+        if (isOpen) {
+            // Close
+            servo1.setPosition(0.0);
+            servo2.setPosition(1.0);
+        } else {
+            // Open (invert)
+            servo1.setPosition(1.0);
+            servo2.setPosition(0.0);
+        }
+        isOpen = !isOpen; // flip the state
+    }
 }
