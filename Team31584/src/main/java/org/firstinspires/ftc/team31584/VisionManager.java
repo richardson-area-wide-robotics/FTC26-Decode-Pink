@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.team31584;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -11,8 +14,8 @@ import java.util.List;
 
 public class VisionManager {
 
-    private final VisionPortal visionPortal1;
-    private final VisionPortal visionPortal2;
+    public final VisionPortal visionPortal1;
+    public final VisionPortal visionPortal2;
     private final AprilTagProcessor aprilTag1;
     private final AprilTagProcessor aprilTag2;
 
@@ -29,6 +32,7 @@ public class VisionManager {
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(aprilTag1)
                 .setLiveViewContainerId(viewIds[0])
+                .setCameraResolution(new Size(640, 480)) // Width x Height
                 .build();
 
         // Portal for Webcam 2
@@ -36,6 +40,7 @@ public class VisionManager {
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"))
                 .addProcessor(aprilTag2)
                 .setLiveViewContainerId(viewIds[1])
+                .setCameraResolution(new Size(640, 480)) // Width x Height
                 .build();
     }
 
@@ -55,4 +60,3 @@ public class VisionManager {
         visionPortal2.close();
     }
 }
-

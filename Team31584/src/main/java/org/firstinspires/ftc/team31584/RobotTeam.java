@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.team31584;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
-
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
@@ -43,12 +45,13 @@ public class RobotTeam extends LinearOpMode {
             }
             if (gamepad1.b) {
                 if(relativeX>0){
-                    Drivetrain.drive(0.0f,-1.0f,0.0f);
-                }
-                if(relativeX<0){
                     Drivetrain.drive(0.0f,1.0f,0.0f);
                 }
+                if(relativeX<0){
+                    Drivetrain.drive(0.0f,-1.0f,0.0f);
+                }
             }
+
 
             Drivetrain.driveFieldRelative(powerV, powerH, powerR);
 
@@ -60,12 +63,9 @@ public class RobotTeam extends LinearOpMode {
 
                 for (AprilTagDetection tag : detections1) {
                     telemetry.addData("[Cam1] Tag ID", tag.id);
-                    telemetry.addData("[Cam1] TAGPos X", tag.ftcPose.x);
-                    telemetry.addData("[Cam1] TAGPos Y", tag.ftcPose.y);
-                    telemetry.addData("[Cam1] TAGPos Z", tag.ftcPose.z);
-                    telemetry.addData("[Cam1] ROBOTPos X", tag.robotPose.getPosition().x);
-                    telemetry.addData("[Cam1] ROBOTPos Y", tag.robotPose.getPosition().y);
-                    telemetry.addData("[Cam1] ROBOTPos Z", tag.robotPose.getPosition().z);
+                    telemetry.addData("[Cam1] Pos X", tag.ftcPose.x);
+                    telemetry.addData("[Cam1] Pos Y", tag.ftcPose.y);
+                    telemetry.addData("[Cam1] Pos Z", tag.ftcPose.z);
                 }
             } else {
                 relativeX = 0;
@@ -102,4 +102,3 @@ public class RobotTeam extends LinearOpMode {
         visionManager.close();
     }
 }
-
