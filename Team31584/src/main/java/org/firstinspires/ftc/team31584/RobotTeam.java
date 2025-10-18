@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
+
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -18,6 +20,8 @@ public class RobotTeam extends LinearOpMode {
     double relativeZ = 0;
     private VisionManager visionManager;
 
+    private double intakeRot = 0;
+
     @Override
     public void runOpMode() {
         IMU imu = hardwareMap.get(IMU.class, "imu");
@@ -28,7 +32,10 @@ public class RobotTeam extends LinearOpMode {
                 hardwareMap.get(DcMotor.class, "motor 3"),
                 imu
         );
-        Intake.init(hardwareMap.get(Servo.class, "Servo0"), hardwareMap.get(Servo.class, "Servo1"));
+        Intake.init(
+                hardwareMap.get(CRServo.class,"servo 0"),
+                hardwareMap.get(DcMotor.class,"core 0")
+        );
 
         // --- Setup Vision ---
         visionManager = new VisionManager(hardwareMap);
@@ -52,7 +59,10 @@ public class RobotTeam extends LinearOpMode {
                 }
             }
             if(gamepad1.y){
-                Intake.servo();
+                intakeRot = Intake.rotate(1);
+            }
+            else{
+                Intake.rotate(0);
             }
 
 
@@ -80,7 +90,9 @@ public class RobotTeam extends LinearOpMode {
             if (!detections2.isEmpty()) {
                 for (AprilTagDetection tag : detections2) {
                     telemetry.addData("[Cam2] Tag ID", tag.id);
-                    telemetry.addData("[Cam2] Pos X", tag.ftcPose.x);
+                    if(tag.id == 20 || tag.id == 24){telemetry.addLine("Not the Obolisk");}
+
+                        telemetry.addData("[Cam2] Pos X", tag.ftcPose.x);
                     telemetry.addData("[Cam2] Pos Y", tag.ftcPose.y);
                     telemetry.addData("[Cam2] Pos Z", tag.ftcPose.z);
                 }
@@ -97,7 +109,8 @@ public class RobotTeam extends LinearOpMode {
             telemetry.addData("Back Left Motor Power", Drivetrain.backLeftMotor.getPower());
             telemetry.addData("Horz Power", powerH);
             telemetry.addData("Vert Power", powerV);
-            telemetry.addData("Rota Power", powerR);
+            telemetry.addData("Roha Power", powerR);
+            telemetry.addData("intake Spin", intakeRot);
             telemetry.update();
         }
 
