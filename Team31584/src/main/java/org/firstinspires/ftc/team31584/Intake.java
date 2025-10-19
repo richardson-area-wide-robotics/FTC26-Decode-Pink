@@ -14,12 +14,13 @@ public class Intake {
     public static void init(CRServo s0, DcMotor ft){
         servo0 = s0;
         feederMotor = ft;
+        feederMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public static double rotate(double power){
 
         servo0.setPower(-power);
-        feederMotor.setPower(power);
+        feederMotor.setPower(-power);
 
         return servo0.getPower();
     }

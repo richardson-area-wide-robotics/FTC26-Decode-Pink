@@ -28,9 +28,9 @@ public class Drivetrain {
 
         // This needs to be changed to match the orientation on your robot
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.UP;
+                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         RevHubOrientationOnRobot orientationOnRobot = new
                 RevHubOrientationOnRobot(logoDirection, usbDirection);
@@ -60,11 +60,11 @@ public class Drivetrain {
     public static void drive(double forward, double strafe, double rotate){
 
 
-        forwardRightMotor.setPower(-forward - strafe + rotate);
+        forwardRightMotor.setPower(forward + strafe + rotate);
         forwardLeftMotor.setPower(-forward - strafe - rotate);
 
-        backRightMotor.setPower(forward - strafe - rotate);
-        backLeftMotor.setPower((-forward + strafe +rotate));
+        backRightMotor.setPower(-forward - strafe - rotate);
+        backLeftMotor.setPower((forward - strafe + rotate));
 
     }
 }
