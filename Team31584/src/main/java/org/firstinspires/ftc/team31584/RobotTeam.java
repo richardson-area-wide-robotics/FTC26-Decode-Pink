@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 
@@ -34,6 +33,7 @@ public class RobotTeam extends LinearOpMode {
         );
         Intake.init(
                 hardwareMap.get(CRServo.class,"servo 0"),
+                hardwareMap.get(DcMotor.class,"core 1"),
                 hardwareMap.get(DcMotor.class,"core 0")
         );
 
@@ -59,10 +59,10 @@ public class RobotTeam extends LinearOpMode {
                 }
             }
             if(gamepad1.y){
-                intakeRot = Intake.rotate(1);
+                intakeRot = Intake.intake(1);
             }
             else{
-                Intake.rotate(0);
+                intakeRot = Intake.intake(0);
             }
 
 
@@ -110,7 +110,7 @@ public class RobotTeam extends LinearOpMode {
             telemetry.addData("Horz Power", powerH);
             telemetry.addData("Vert Power", powerV);
             telemetry.addData("Roha Power", powerR);
-            telemetry.addData("intake Spin", intakeRot);
+            telemetry.addData("Intake Spin", intakeRot);
             telemetry.update();
         }
 
