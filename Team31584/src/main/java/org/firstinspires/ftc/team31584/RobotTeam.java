@@ -33,6 +33,9 @@ public class RobotTeam extends LinearOpMode {
                 hardwareMap.get(DcMotor.class,"core 1"),
                 hardwareMap.get(DcMotor.class,"core 0")
         );
+        PoseConvert.init(hardwareMap.get(IMU.class, "imu 2"));
+
+        Shooter.init(hardwareMap.get(DcMotor.class,"shooter"));
 
         // --- Setup Vision ---
         visionManager = new VisionManager(hardwareMap);
@@ -44,21 +47,23 @@ public class RobotTeam extends LinearOpMode {
             double powerH = gamepad1.left_stick_x;
             double powerR = gamepad1.right_stick_x;
 
-            if (gamepad1.a) {
+            if (gamepad1.a) { // Reset Yaw
                 imu.resetYaw();
             }
-            if (gamepad1.b) {
+            if (gamepad1.b) { // Look at April Tag
                 if (relativeX > 0) {
                     Drivetrain.drive(0.0f, 1.0f, 0.0f);
                 } else if (relativeX < 0) {
                     Drivetrain.drive(0.0f, -1.0f, 0.0f);
                 }
             }
-            if(gamepad1.y){
+            if(gamepad1.y){ // Intake
                 intakeRot = Intake.intake(1);
             } else {
                 intakeRot = Intake.intake(0);
             }
+
+            Shooter.shoot(gamepad1.right_trigger); // Shoot that thang
 
             Drivetrain.driveFieldRelative(powerV, powerH, powerR);
 

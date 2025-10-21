@@ -1,13 +1,16 @@
 package org.firstinspires.ftc.team31584;
 
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Shooter {
 
-    public static void init(){
+    private static DcMotor shooterMotor;
 
+    public static void init(DcMotor motor){
+        shooterMotor = motor;
+    }
+    public static void shoot(double power){
+        shooterMotor.setPower(power);
     }
 
 }
