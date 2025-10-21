@@ -53,6 +53,31 @@ public class VisionManager {
         return aprilTag2.getDetections();
     }
 
+    /**
+     * Get all AprilTag detections from both cameras,
+     * excluding tag IDs 21, 22, and 23 (Obelisk)
+     */
+    public List<AprilTagDetection> getAllDetections() {
+        List<AprilTagDetection> allDetections = new java.util.ArrayList<>();
+
+        if (aprilTag1.getDetections() != null) {
+            allDetections.addAll(aprilTag1.getDetections());
+        }
+
+        if (aprilTag2.getDetections() != null) {
+            allDetections.addAll(aprilTag2.getDetections());
+        }
+
+        // Remove obelisk
+        allDetections.removeIf(detection ->
+                detection.id == 21 || detection.id == 22 || detection.id == 23
+        );
+
+        return allDetections;
+    }
+
+
+
     /** Stop both vision portals */
     public void close() {
         visionPortal1.close();
