@@ -33,7 +33,7 @@ public class RobotTeam extends LinearOpMode {
                 hardwareMap.get(DcMotor.class,"core 1"),
                 hardwareMap.get(DcMotor.class,"core 0")
         );
-        PoseConvert.init(hardwareMap.get(IMU.class, "imu 2"));
+        //PoseConvert.init(hardwareMap.get(IMU.class, "imu 2"));
 
         Shooter.init(hardwareMap.get(DcMotor.class,"shooter"));
 
