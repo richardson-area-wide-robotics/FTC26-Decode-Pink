@@ -9,6 +9,7 @@ import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VisionManager {
@@ -76,6 +77,30 @@ public class VisionManager {
         return allDetections;
     }
 
+    private int obelID = -1;
+
+    public int getObeliskID() {
+        List<AprilTagDetection> allDetections = new ArrayList<>();
+
+        if (aprilTag1.getDetections() != null) {
+            allDetections.addAll(aprilTag1.getDetections());
+        }
+
+        if (aprilTag2.getDetections() != null) {
+            allDetections.addAll(aprilTag2.getDetections());
+        }
+
+        for (AprilTagDetection detection : allDetections) {
+            if (detection.id == 21 || detection.id == 22 || detection.id == 23) {
+                obelID = detection.id;
+
+                return obelID;
+            }
+        }
+
+        // No obelisk tag found, send the old one.
+        return obelID;
+    }
 
 
     /** Stop both vision portals */

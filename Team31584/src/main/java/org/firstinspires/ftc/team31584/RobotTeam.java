@@ -13,6 +13,10 @@ import java.util.List;
 @TeleOp(name = "PinkBot2")
 public class RobotTeam extends LinearOpMode {
 
+    //TODO TODAY
+    //* UnShoot method
+    //* UnIntake method
+    //* NAV
     double relativeX = 0;
     double relativeZ = 0;
     private VisionManager visionManager;
@@ -33,7 +37,7 @@ public class RobotTeam extends LinearOpMode {
                 hardwareMap.get(DcMotor.class,"core 1"),
                 hardwareMap.get(DcMotor.class,"core 0")
         );
-        //PoseConvert.init(hardwareMap.get(IMU.class, "imu 2"));
+        PoseConvert.init(hardwareMap.get(IMU.class, "imu 2"));
 
         Shooter.init(hardwareMap.get(DcMotor.class,"shooter"));
 
@@ -50,35 +54,40 @@ public class RobotTeam extends LinearOpMode {
             if (gamepad1.a) { // Reset Yaw
                 imu.resetYaw();
             }
-            if (gamepad1.b) { // Look at April Tag
-                if (relativeX > 0) {
-                    Drivetrain.drive(0.0f, 1.0f, 0.0f);
-                } else if (relativeX < 0) {
-                    Drivetrain.drive(0.0f, -1.0f, 0.0f);
-                }
-            }
-            if(gamepad1.y){ // Intake
+            if(gamepad1.x){ // Intake
                 intakeRot = Intake.intake(1);
+            } else if (gamepad1.b){
+                intakeRot = Intake.intake(-1);
             } else {
                 intakeRot = Intake.intake(0);
             }
 
             Shooter.shoot(gamepad1.right_trigger); // Shoot that thang
+            Shooter.shoot(-gamepad1.left_trigger); //Unshoot that thang
 
             Drivetrain.driveFieldRelative(powerV, powerH, powerR);
 
             // --- AprilTag detections ---
             List<AprilTagDetection> detections = visionManager.getAllDetections();
             if (!detections.isEmpty()) {
+                telemetry.addData("[Tag] Obelisk ID", visionManager.getObeliskID());
+
                 // Use first detection for relative positioning
                 relativeX = detections.get(0).ftcPose.x;
                 relativeZ = detections.get(0).ftcPose.z;
 
                 for (AprilTagDetection tag : detections) {
                     telemetry.addData("[Tag] ID", tag.id);
-                    telemetry.addData("[Tag] Pos X", tag.ftcPose.x);
-                    telemetry.addData("[Tag] Pos Y", tag.ftcPose.y);
-                    telemetry.addData("[Tag] Pos Z", tag.ftcPose.z);
+                    if(tag.id==20||tag.id ==24){
+                        PoseConvert.TileCord coord = PoseConvert.covertToTileCoord(tag.robotPose);
+                        telemetry.addLine("CORD: ("+coord.x+","+coord.z+")");
+
+
+                    }else {
+                        telemetry.addData("[Tag] Pos X", tag.ftcPose.x);
+                        telemetry.addData("[Tag] Pos Y", tag.ftcPose.y);
+                        telemetry.addData("[Tag] Pos Z", tag.ftcPose.z);
+                    }
                 }
             } else {
                 relativeX = 0;

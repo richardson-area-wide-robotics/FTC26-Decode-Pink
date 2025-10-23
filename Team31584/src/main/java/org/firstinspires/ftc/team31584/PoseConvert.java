@@ -28,6 +28,7 @@ public class PoseConvert {
 
         Position position = new Position(
                 DistanceUnit.INCH,
+                //dimension - (distance from tag to edge+distance to tag*trig(mesured angle to tag+angle to starting point)
                 141-(12+hypot*Math.cos(theta+imu.getRobotYawPitchRollAngles().getYaw())),
                 0.0,
                 141-(12+hypot*Math.sin(theta+imu.getRobotYawPitchRollAngles().getYaw())),0);
@@ -38,13 +39,7 @@ public class PoseConvert {
         return pretileCoord;
     }
 
-    public static TileCord covertToTileCoord(Position position){
-        position.toUnit(DistanceUnit.INCH);
 
-        pretileCoord = new TileCord(position);
-
-        return pretileCoord;
-    }
 
 
     public static class TileCord {
