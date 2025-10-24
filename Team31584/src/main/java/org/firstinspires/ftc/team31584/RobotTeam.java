@@ -37,7 +37,7 @@ public class RobotTeam extends LinearOpMode {
                 hardwareMap.get(DcMotor.class,"core 1"),
                 hardwareMap.get(DcMotor.class,"core 0")
         );
-        PoseConvert.init(hardwareMap.get(IMU.class, "imu 2"));
+        PoseConvert.init(hardwareMap.get(IMU.class, "imu"));
 
         Shooter.init(hardwareMap.get(DcMotor.class,"shooter"));
 
@@ -63,7 +63,6 @@ public class RobotTeam extends LinearOpMode {
             }
 
             Shooter.shoot(gamepad1.right_trigger); // Shoot that thang
-            Shooter.shoot(-gamepad1.left_trigger); //Unshoot that thang
 
             Drivetrain.driveFieldRelative(powerV, powerH, powerR);
 
@@ -79,9 +78,7 @@ public class RobotTeam extends LinearOpMode {
                 for (AprilTagDetection tag : detections) {
                     telemetry.addData("[Tag] ID", tag.id);
                     if(tag.id==20||tag.id ==24){
-                        PoseConvert.TileCord coord = PoseConvert.covertToTileCoord(tag.robotPose);
-                        telemetry.addLine("CORD: ("+coord.x+","+coord.z+")");
-
+                        PoseConvert.covertToTileCoord(tag.robotPose);
 
                     }else {
                         telemetry.addData("[Tag] Pos X", tag.ftcPose.x);
@@ -96,6 +93,12 @@ public class RobotTeam extends LinearOpMode {
             }
 
             // --- Telemetry ---
+            PoseConvert.TileCord coord = PoseConvert.getPretileCoord();
+
+            if(coord != null){
+                telemetry.addLine("CORD: ("+coord.x+","+coord.z+")");
+            }
+
             telemetry.addData("Stick Y Gamepad", gamepad1.left_stick_y);
             telemetry.addData("Stick X Gamepad", gamepad1.left_stick_x);
             telemetry.addData("Forward Right Motor Power", Drivetrain.forwardRightMotor.getPower());

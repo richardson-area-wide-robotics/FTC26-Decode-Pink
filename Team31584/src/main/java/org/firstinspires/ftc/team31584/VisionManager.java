@@ -14,34 +14,38 @@ import java.util.List;
 
 public class VisionManager {
 
-    public final VisionPortal visionPortal1;
-    public final VisionPortal visionPortal2;
-    private final AprilTagProcessor aprilTag1;
-    private final AprilTagProcessor aprilTag2;
+    private VisionPortal visionPortal1;
+    private VisionPortal visionPortal2;
+    private AprilTagProcessor aprilTag1;
+    private AprilTagProcessor aprilTag2;
+    private final boolean useWebcam1 = true;
+    private final boolean useWebcam2 = false;
 
     public VisionManager(HardwareMap hardwareMap) {
-        // Build AprilTag processors
-        aprilTag1 = new AprilTagProcessor.Builder().build();
-        aprilTag2 = new AprilTagProcessor.Builder().build();
+        int activeCams = (useWebcam1 ? 1 : 0) + (useWebcam2 ? 1 : 0);
+        int[] viewIds = VisionPortal.makeMultiPortalView(Math.max(activeCams, 1), VisionPortal.MultiPortalLayout.HORIZONTAL);
 
-        // Split preview into 2 panes
-        int[] viewIds = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
+        int viewIndex = 0;
 
-        // Portal for Webcam 1
-        visionPortal1 = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .addProcessor(aprilTag1)
-                .setLiveViewContainerId(viewIds[0])
-                .setCameraResolution(new Size(640, 480)) // Width x Height
-                .build();
+        if (useWebcam1) {
+            aprilTag1 = new AprilTagProcessor.Builder().build();
+            visionPortal1 = new VisionPortal.Builder()
+                    .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                    .addProcessor(aprilTag1)
+                    .setLiveViewContainerId(viewIds[viewIndex++])
+                    .setCameraResolution(new Size(640, 480))
+                    .build();
+        }
 
-        // Portal for Webcam 2
-        visionPortal2 = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"))
-                .addProcessor(aprilTag2)
-                .setLiveViewContainerId(viewIds[1])
-                .setCameraResolution(new Size(640, 480)) // Width x Height
-                .build();
+        if (useWebcam2) {
+            aprilTag2 = new AprilTagProcessor.Builder().build();
+            visionPortal2 = new VisionPortal.Builder()
+                    .setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"))
+                    .addProcessor(aprilTag2)
+                    .setLiveViewContainerId(viewIds[viewIndex])
+                    .setCameraResolution(new Size(640, 480))
+                    .build();
+        }
     }
 
     /** Get AprilTag detections for camera 1 */
@@ -59,53 +63,29 @@ public class VisionManager {
      * excluding tag IDs 21, 22, and 23 (Obelisk)
      */
     public List<AprilTagDetection> getAllDetections() {
-        List<AprilTagDetection> allDetections = new java.util.ArrayList<>();
-
-        if (aprilTag1.getDetections() != null) {
-            allDetections.addAll(aprilTag1.getDetections());
-        }
-
-        if (aprilTag2.getDetections() != null) {
-            allDetections.addAll(aprilTag2.getDetections());
-        }
-
-        // Remove obelisk
-        allDetections.removeIf(detection ->
-                detection.id == 21 || detection.id == 22 || detection.id == 23
-        );
-
-        return allDetections;
+        List<AprilTagDetection> all = new ArrayList<>();
+        all.addAll(getCam1Detections());
+        all.addAll(getCam2Detections());
+        all.removeIf(tag -> tag.id == 21 || tag.id == 22 || tag.id == 23);
+        return all;
     }
 
     private int obelID = -1;
 
     public int getObeliskID() {
-        List<AprilTagDetection> allDetections = new ArrayList<>();
-
-        if (aprilTag1.getDetections() != null) {
-            allDetections.addAll(aprilTag1.getDetections());
-        }
-
-        if (aprilTag2.getDetections() != null) {
-            allDetections.addAll(aprilTag2.getDetections());
-        }
-
-        for (AprilTagDetection detection : allDetections) {
+        for (AprilTagDetection detection : getAllDetections()) {
             if (detection.id == 21 || detection.id == 22 || detection.id == 23) {
                 obelID = detection.id;
-
                 return obelID;
             }
         }
-
-        // No obelisk tag found, send the old one.
         return obelID;
     }
 
 
     /** Stop both vision portals */
     public void close() {
-        visionPortal1.close();
-        visionPortal2.close();
+        if (visionPortal1 != null) visionPortal1.close();
+        if (visionPortal2 != null) visionPortal2.close();
     }
 }
