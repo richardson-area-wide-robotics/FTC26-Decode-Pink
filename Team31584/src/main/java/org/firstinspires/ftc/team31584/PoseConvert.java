@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.team31584;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -57,8 +59,12 @@ public class PoseConvert {
             this.x = Math.toIntExact(Math.round(position.x / tileSizeInches));
             this.z = Math.toIntExact(Math.round(position.y/tileSizeInches));
 
+        }
 
-
+        @NonNull
+        @Override
+        public String toString(){
+            return "TILECORD: "+this.x+","+this.z;
         }
     }
 

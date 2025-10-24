@@ -96,7 +96,7 @@ public class RobotTeam extends LinearOpMode {
             PoseConvert.TileCord coord = PoseConvert.getPretileCoord();
 
             if(coord != null){
-                telemetry.addLine("CORD: ("+coord.x+","+coord.z+")");
+                telemetry.addLine(coord.toString());
             }
 
             telemetry.addData("Stick Y Gamepad", gamepad1.left_stick_y);
