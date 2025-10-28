@@ -10,7 +10,7 @@ public class Shooter {
         shooterMotor = motor;
     }
     public static void shoot(double power){
-        shooterMotor.setPower(power);
+        shooterMotor.setPower(-power);
     }
 
 }
