@@ -60,11 +60,11 @@ public class Drivetrain {
     public static void drive(double forward, double strafe, double rotate){
 
 
-        forwardRightMotor.setPower(forward + strafe + rotate);
-        forwardLeftMotor.setPower(-forward - strafe - rotate);
+        forwardRightMotor.setPower(forward + strafe - rotate);
+        forwardLeftMotor.setPower(forward - strafe - rotate);
 
-        backRightMotor.setPower(-forward - strafe - rotate);
-        backLeftMotor.setPower((forward - strafe + rotate));
+        backRightMotor.setPower(forward - strafe +rotate);
+        backLeftMotor.setPower((forward + strafe + rotate));
 
     }
 }

@@ -47,8 +47,8 @@ public class RobotTeam extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            double powerV = gamepad1.left_stick_y;
-            double powerH = gamepad1.left_stick_x;
+            double powerV = gamepad1.left_stick_x;
+            double powerH = gamepad1.left_stick_y;
             double powerR = gamepad1.right_stick_x;
 
             if (gamepad1.a) { // Reset Yaw
