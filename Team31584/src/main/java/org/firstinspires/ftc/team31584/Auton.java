@@ -14,7 +14,7 @@ public class Auton extends LinearOpMode {
         IMU imu = hardwareMap.get(IMU.class, "imu");
 
         // Initialize drivetrain motors
-        Drivetrain.init(
+        final Drivetrain DRIVETRAIN = new Drivetrain(
                 hardwareMap.get(DcMotor.class, "motor 0"),
                 hardwareMap.get(DcMotor.class, "motor 1"),
                 hardwareMap.get(DcMotor.class, "motor 2"),
@@ -28,10 +28,10 @@ public class Auton extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            runFor(1000, () -> Drivetrain.drive(1.0f, 0.0f, 0.0f));
-            runFor(1000, () -> Drivetrain.drive(0.0f, 1.0f, 0.0f));
-            runFor(1000, () -> Drivetrain.drive(0.0f, 0.0f, 1.0f));
-            Drivetrain.drive(0, 0, 0); // stop
+            runFor(1000, () -> DRIVETRAIN.drive(1.0f, 0.0f, 0.0f));
+            runFor(1000, () -> DRIVETRAIN.drive(0.0f, 1.0f, 0.0f));
+            runFor(1000, () -> DRIVETRAIN.drive(0.0f, 0.0f, 1.0f));
+            DRIVETRAIN.stop();
 
 
             telemetry.addLine("Finished autonomous actions");

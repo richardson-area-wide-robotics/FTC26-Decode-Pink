@@ -19,6 +19,8 @@ public class VisionManager {
     private final AprilTagProcessor aprilTag1;
     private final AprilTagProcessor aprilTag2;
 
+    private final boolean useWebcam2 = false;
+
     public VisionManager(HardwareMap hardwareMap) {
         // Build AprilTag processors
         aprilTag1 = new AprilTagProcessor.Builder().build();
@@ -35,7 +37,7 @@ public class VisionManager {
                 .setCameraResolution(new Size(640, 480)) // Width x Height
                 .build();
 
-        if(false){
+        if(useWebcam2){
             // Portal for Webcam 2
             visionPortal2 = new VisionPortal.Builder()
                     .setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"))
@@ -108,6 +110,9 @@ public class VisionManager {
     /** Stop both vision portals */
     public void close() {
         visionPortal1.close();
-        visionPortal2.close();
+
+        if(useWebcam2){
+            visionPortal2.close();
+        }
     }
 }

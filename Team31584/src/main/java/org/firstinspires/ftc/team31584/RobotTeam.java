@@ -13,33 +13,27 @@ import java.util.List;
 @TeleOp(name = "PinkBot2")
 public class RobotTeam extends LinearOpMode {
 
-    //TODO TODAY
-    //* UnShoot method
-    //* UnIntake method
-    //* NAV
     double relativeX = 0;
     double relativeZ = 0;
     private VisionManager visionManager;
-    private double intakeRot = 0;
 
     @Override
     public void runOpMode() {
         IMU imu = hardwareMap.get(IMU.class, "imu");
-        Drivetrain.init(
+        final Drivetrain DRIVETRAIN = new Drivetrain(
                 hardwareMap.get(DcMotor.class, "motor 0"),
                 hardwareMap.get(DcMotor.class, "motor 1"),
                 hardwareMap.get(DcMotor.class, "motor 2"),
                 hardwareMap.get(DcMotor.class, "motor 3"),
                 imu
         );
-        Intake.init(
-                hardwareMap.get(CRServo.class,"servo 0"),
+        final Intake INTAKE = new Intake(hardwareMap.get(CRServo.class,"servo 0"),
                 hardwareMap.get(DcMotor.class,"core 1"),
-                hardwareMap.get(DcMotor.class,"core 0")
-        );
+                hardwareMap.get(DcMotor.class,"core 0"));
+
         PoseConvert.init(hardwareMap.get(IMU.class, "imu"));
 
-        Shooter.init(hardwareMap.get(DcMotor.class,"shooter"));
+        final Shooter SHOOTER = new Shooter(hardwareMap.get(DcMotor.class,"shooter"));
 
         // --- Setup Vision ---
         visionManager = new VisionManager(hardwareMap);
@@ -55,21 +49,29 @@ public class RobotTeam extends LinearOpMode {
                 imu.resetYaw();
             }
             if(gamepad1.x){ // Intake
-                intakeRot = Intake.intake(1);
+                INTAKE.intake(1);
             } else if (gamepad1.b){
-                intakeRot = Intake.intake(-1);
+                INTAKE.intake(-1);
             } else {
-                intakeRot = Intake.intake(0);
+                 INTAKE.intake(0);
             }
 
-            Shooter.shoot(gamepad1.right_trigger); // Shoot that thang
+            // Shoot that thang
+            if (gamepad1.right_trigger > 0.1) {
+                SHOOTER.shoot(gamepad1.right_trigger); // Forward shoot
+            } else if (gamepad1.left_trigger > 0.1) {
+                SHOOTER.shoot(-gamepad1.left_trigger); // Reverse
+            }
 
-            Drivetrain.driveFieldRelative(powerV, powerH, powerR);
+            DRIVETRAIN.driveFieldRelative(powerV, powerH, powerR);
 
             // --- AprilTag detections ---
             List<AprilTagDetection> detections = visionManager.getAllDetections();
             if (!detections.isEmpty()) {
-                telemetry.addData("[Tag] Obelisk ID", visionManager.getObeliskID());
+
+                if(visionManager.getObeliskID() != -1){
+                    telemetry.addData("[Tag] Obelisk ID", visionManager.getObeliskID());
+                }
 
                 // Use first detection for relative positioning
                 relativeX = detections.get(0).ftcPose.x;
@@ -101,14 +103,15 @@ public class RobotTeam extends LinearOpMode {
 
             telemetry.addData("Stick Y Gamepad", gamepad1.left_stick_y);
             telemetry.addData("Stick X Gamepad", gamepad1.left_stick_x);
-            telemetry.addData("Forward Right Motor Power", Drivetrain.forwardRightMotor.getPower());
-            telemetry.addData("Forward Left Motor Power", Drivetrain.forwardLeftMotor.getPower());
-            telemetry.addData("Back Right Motor Power", Drivetrain.backRightMotor.getPower());
-            telemetry.addData("Back Left Motor Power", Drivetrain.backLeftMotor.getPower());
+            telemetry.addData("Forward Right Motor Power", DRIVETRAIN.forwardRightMotor.getPower());
+            telemetry.addData("Forward Left Motor Power", DRIVETRAIN.forwardLeftMotor.getPower());
+            telemetry.addData("Back Right Motor Power", DRIVETRAIN.backRightMotor.getPower());
+            telemetry.addData("Back Left Motor Power", DRIVETRAIN.backLeftMotor.getPower());
             telemetry.addData("Horz Power", powerH);
             telemetry.addData("Vert Power", powerV);
             telemetry.addData("Roha Power", powerR);
-            telemetry.addData("Intake Spin", intakeRot);
+            telemetry.addData("Intake Spin", INTAKE.getMekSpeed());
+            telemetry.addData("Shooter Spin", SHOOTER.getMekSpeed());
             telemetry.update();
         }
 
