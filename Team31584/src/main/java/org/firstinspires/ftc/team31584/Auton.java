@@ -28,9 +28,7 @@ public class Auton extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            runFor(1000, () -> Drivetrain.drive(1.0f, 0.0f, 0.0f));
-            runFor(1000, () -> Drivetrain.drive(0.0f, 1.0f, 0.0f));
-            runFor(1000, () -> Drivetrain.drive(0.0f, 0.0f, 1.0f));
+            runFor(2000, () -> Drivetrain.drive(1.0f, 0.0f, 0.0f));
             Drivetrain.drive(0, 0, 0); // stop
 
 
