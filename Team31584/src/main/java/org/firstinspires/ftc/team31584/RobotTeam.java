@@ -64,7 +64,7 @@ public class RobotTeam extends LinearOpMode {
 
             Shooter.shoot(gamepad1.right_trigger); // Shoot that thang
 
-            Drivetrain.driveFieldRelative(powerV, powerH, powerR);
+            Drivetrain.drive(powerV, powerH, powerR);
 
             // --- AprilTag detections ---
             List<AprilTagDetection> detections = visionManager.getAllDetections();
