@@ -28,8 +28,10 @@ public class Auton extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            runFor(500, () -> Drivetrain.drive(0.0f, -1.0f, 0.0f));
-            Drivetrain.drive(0, 0, 0); // stop
+            runFor(30000, () -> Drivetrain.drive(14.0f, 0.0f, 0.0f));
+            Drivetrain.drive(0.0f, 0.0f, 6.0f);
+            //here when we have a shooter shoot 1 ball
+            Drivetrain.drive(0.0f, 0.0f, 4.0f);// stop
 
 
             telemetry.addLine("Finished autonomous actions");
