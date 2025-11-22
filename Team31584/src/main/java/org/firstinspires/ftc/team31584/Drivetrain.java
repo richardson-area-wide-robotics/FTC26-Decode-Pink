@@ -21,10 +21,10 @@ public class Drivetrain {
 
         imu = imuin;
 
-        forwardRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        forwardLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //forwardRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //forwardLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // This needs to be changed to match the orientation on your robot
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
@@ -60,11 +60,11 @@ public class Drivetrain {
     public static void drive(double forward, double strafe, double rotate){
 
 
-        forwardRightMotor.setPower(forward + strafe - rotate);
-        forwardLeftMotor.setPower(forward - strafe - rotate);
+        forwardRightMotor.setPower(forward + strafe + rotate);
+        forwardLeftMotor.setPower(forward - strafe + rotate);
 
-        backRightMotor.setPower(forward - strafe +rotate);
-        backLeftMotor.setPower((forward + strafe + rotate));
+        backRightMotor.setPower(forward - strafe - rotate);
+        backLeftMotor.setPower((forward + strafe - rotate));
 
     }
 }

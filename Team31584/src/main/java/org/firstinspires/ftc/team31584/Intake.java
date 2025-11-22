@@ -26,7 +26,7 @@ public class Intake {
     public static double intake(double power){
 
         feederMotor1.setPower(-power);
-        feederMotor2.setPower(-power);
+        feederMotor2.setPower((power));
 
         return feederMotor2.getPower();
     }
