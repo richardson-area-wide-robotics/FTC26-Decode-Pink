@@ -26,16 +26,15 @@ public class RobotTeam extends LinearOpMode {
     public void runOpMode() {
         IMU imu = hardwareMap.get(IMU.class, "imu");
         Drivetrain.init(
-                hardwareMap.get(DcMotor.class, "motor 0"),
-                hardwareMap.get(DcMotor.class, "motor 1"),
-                hardwareMap.get(DcMotor.class, "motor 2"),
-                hardwareMap.get(DcMotor.class, "motor 3"),
+                hardwareMap.get(DcMotor.class, "frontRight"),
+                hardwareMap.get(DcMotor.class, "backRight"),
+                hardwareMap.get(DcMotor.class, "frontLeft"),
+                hardwareMap.get(DcMotor.class, "backLeft"),
                 imu
         );
         Intake.init(
-                hardwareMap.get(CRServo.class,"servo 0"),
-                hardwareMap.get(DcMotor.class,"core 1"),
-                hardwareMap.get(DcMotor.class,"core 0")
+                hardwareMap.get(DcMotor.class,"intakeCore"),
+                hardwareMap.get(DcMotor.class,"intakeMotor")
         );
         PoseConvert.init(hardwareMap.get(IMU.class, "imu"));
 
