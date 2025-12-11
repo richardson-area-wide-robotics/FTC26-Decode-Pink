@@ -31,6 +31,18 @@ public class Intake {
         return feederMotor2.getPower();
     }
 
+    /**
+     * Intake a ball
+     *
+     * @param power Power to set the intake motors to, Positive = Into robot
+     */
+    public static double kick(double power){
+
+        feederMotor2.setPower((power));
+
+        return feederMotor2.getPower();
+    }
+
 
 
 }

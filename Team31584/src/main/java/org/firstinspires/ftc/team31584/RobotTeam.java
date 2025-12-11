@@ -22,6 +22,10 @@ public class RobotTeam extends LinearOpMode {
     private VisionManager visionManager;
     private double intakeRot = 0;
 
+    boolean kickMode = false;
+    boolean yPressedLast = false;
+
+
     @Override
     public void runOpMode() {
         IMU imu = hardwareMap.get(IMU.class, "imu");
@@ -53,15 +57,32 @@ public class RobotTeam extends LinearOpMode {
             if (gamepad1.a) { // Reset Yaw
                 imu.resetYaw();
             }
-            if(gamepad1.x){ // Intake
-                intakeRot = Intake.intake(1);
-            } else if (gamepad1.b){
-                intakeRot = Intake.intake(-1);
+            boolean yPressedNow = gamepad1.y;
+
+            if (yPressedNow && !yPressedLast) {
+                kickMode = !kickMode;
+            }
+
+            yPressedLast = yPressedNow;
+
+            if (kickMode) {
+                // Kick mode ACTIVE → intake is ignored completely
+                intakeRot = Intake.kick(1);
+
             } else {
-                intakeRot = Intake.intake(0);
+                // Normal intake controls only if kickmode is OFF
+                if (gamepad1.x) {
+                    intakeRot = Intake.intake(1);
+                } else if (gamepad1.b) {
+                    intakeRot = Intake.intake(-1);
+                } else {
+                    intakeRot = Intake.intake(0);
+                }
             }
 
             Shooter.shoot(gamepad1.right_trigger); // Shoot that thang
+
+            Shooter.shoot(-gamepad1.left_trigger); // UnShoot that thang
 
             Drivetrain.drive(powerV, powerH, powerR);
 
