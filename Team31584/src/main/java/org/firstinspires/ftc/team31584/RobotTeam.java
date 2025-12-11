@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -13,10 +12,6 @@ import java.util.List;
 @TeleOp(name = "PinkBot2")
 public class RobotTeam extends LinearOpMode {
 
-    //TODO TODAY
-    //* UnShoot method
-    //* UnIntake method
-    //* NAV
     double relativeX = 0;
     double relativeZ = 0;
     private VisionManager visionManager;
@@ -24,7 +19,9 @@ public class RobotTeam extends LinearOpMode {
 
     boolean kickMode = false;
     boolean yPressedLast = false;
-
+    boolean slowMode = false;
+    boolean invertShooter = false;
+    float slowModeReduction = 0.999999f;
 
     @Override
     public void runOpMode() {
@@ -57,6 +54,12 @@ public class RobotTeam extends LinearOpMode {
             if (gamepad1.a) { // Reset Yaw
                 imu.resetYaw();
             }
+            if (gamepad1.dpad_down) { // Toggle slowMode
+                slowMode = !slowMode;
+            }
+            if (gamepad1.dpad_up) { // Toggle invertShooter
+                invertShooter = !invertShooter;
+            }
             boolean yPressedNow = gamepad1.y;
 
             if (yPressedNow && !yPressedLast) {
@@ -80,11 +83,20 @@ public class RobotTeam extends LinearOpMode {
                 }
             }
 
-            Shooter.shoot(gamepad1.right_trigger); // Shoot that thang
+            if(invertShooter){
+                Shooter.shoot(gamepad1.right_trigger); // Shoot that thang
+            }
+            else {
+                Shooter.shoot(-gamepad1.right_trigger);
+            }
 
-            Shooter.shoot(-gamepad1.left_trigger); // UnShoot that thang
+            if(slowMode){
+                Drivetrain.drive(powerV * slowModeReduction, powerH * slowModeReduction, powerR * slowModeReduction);
+            }
+            else {
+                Drivetrain.drive(powerV, powerH, powerR);
 
-            Drivetrain.drive(powerV, powerH, powerR);
+            }
 
             // --- AprilTag detections ---
             List<AprilTagDetection> detections = visionManager.getAllDetections();
@@ -129,6 +141,9 @@ public class RobotTeam extends LinearOpMode {
             telemetry.addData("Vert Power", powerV);
             telemetry.addData("Roha Power", powerR);
             telemetry.addData("Intake Spin", intakeRot);
+            telemetry.addData("slowMode" , slowMode);
+            telemetry.addData("invertedShooter" , invertShooter);
+
             telemetry.update();
         }
 

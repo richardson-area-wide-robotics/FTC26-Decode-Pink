@@ -108,6 +108,6 @@ public class VisionManager {
     /** Stop both vision portals */
     public void close() {
         visionPortal1.close();
-        visionPortal2.close();
+        //visionPortal2.close();
     }
 }
